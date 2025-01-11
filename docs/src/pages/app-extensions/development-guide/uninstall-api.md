@@ -94,7 +94,7 @@ await api.getStorePackageName()
 
 ```js
 /**
- * @return {Promise<string|undefined>} 'npm' | 'yarn' | 'pnpm'
+ * @return {Promise<'npm' | 'yarn' | 'pnpm' | 'bun'>}
  */
 await api.getNodePackagerName()
 ```
@@ -114,8 +114,8 @@ Example of semver condition: `'1.x || >=2.5.0 || 5.0.0 - 7.2.3'`.
 if (api.hasPackage('vuelidate')) {
   // hey, this app has it (any version of it)
 }
-if (api.hasPackage('quasar', '^1.0.0')) {
-  // hey, this app has v1 installed
+if (api.hasPackage('quasar', '^2.0.0')) {
+  // hey, this app has Quasar UI v2 installed
 }
 ```
 
