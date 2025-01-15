@@ -6,6 +6,13 @@ const { cliPkg } = require('../../utils/cli-runtime.js')
 const { getFixedDeps } = require('../../utils/get-fixed-deps.js')
 const { getSsrHtmlTemplateFn } = require('../../utils/html-template.js')
 
+const indexFile = `
+const { startServer } = await import('./start.js')
+const { app, listenResult, handler } = await startServer()
+
+export { app, listenResult, handler }
+`
+
 module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
   async build () {
     await this.#buildWebserver()
@@ -13,7 +20,10 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
     await this.#writePackageJson()
 
     // also update pwa-builder.js when changing here
-    if (this.quasarConf.pwa.workboxMode === 'InjectManifest') {
+    if (
+      this.quasarConf.ssr.pwa === true
+      && this.quasarConf.pwa.workboxMode === 'InjectManifest'
+    ) {
       const esbuildConfig = await quasarSsrConfig.customSw(this.quasarConf)
       await this.buildWithEsbuild('InjectManifest Custom SW', esbuildConfig)
     }
@@ -44,6 +54,7 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
     }))
 
     this.copyFiles(patterns)
+    this.writeFile('index.mjs', indexFile)
   }
 
   async #writePackageJson () {
@@ -59,9 +70,10 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
       author: localAppPkg.author,
       private: true,
       type: 'commonjs',
-      module: 'index.js',
+      main: 'index.mjs',
+      module: 'index.mjs',
       scripts: {
-        start: 'node index.js'
+        start: 'node index.mjs'
       },
       dependencies: Object.assign(appDeps, {
         compression: cliPkg.dependencies.compression,
@@ -89,7 +101,7 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
     )
 
     const html = this.readFile(htmlFile)
-    const templateFn = getSsrHtmlTemplateFn(html, this.quasarConf)
+    const templateFn = await getSsrHtmlTemplateFn(html, this.quasarConf)
 
     this.writeFile(
       'render-template.js',

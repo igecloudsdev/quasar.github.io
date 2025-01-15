@@ -110,7 +110,7 @@ await api.getStorePackageName()
 
 ```js
 /**
- * @return {Promise<string|undefined>} 'npm' | 'yarn' | 'pnpm'
+ * @return {Promise<'npm' | 'yarn' | 'pnpm' | 'bun'>}
  */
 await api.getNodePackagerName()
 ```
@@ -133,10 +133,10 @@ api.compatibleWith('@quasar/app', '1.x')
 
 ```js A more complex example
 if (api.hasVite === true) {
-  api.compatibleWith('@quasar/app-vite', '^1.0.0-beta.0')
+  api.compatibleWith('@quasar/app-vite', '^2.0.0')
 }
 else {
-  api.compatbileWith('@quasar/app-webpack', '^3.4.0')
+  api.compatbileWith('@quasar/app-webpack', '^4.0.0')
 }
 ```
 
@@ -155,8 +155,8 @@ Example of semver condition: `'1.x || >=2.5.0 || 5.0.0 - 7.2.3'`.
 if (api.hasPackage('vuelidate')) {
   // hey, this app has it (any version of it)
 }
-if (api.hasPackage('quasar', '^1.0.0')) {
-  // hey, this app has v1 installed
+if (api.hasPackage('quasar', '^2.0.0')) {
+  // hey, this app has Quasar UI v2 installed
 }
 ```
 

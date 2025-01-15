@@ -9,6 +9,7 @@ import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 import { getProdSsrTemplateFn, transformProdSsrPwaOfflineHtml } from '../../utils/html-template.js'
 
 import { injectPwaManifest, buildPwaServiceWorker } from '../pwa/utils.js'
+import { stringifyJSON } from 'confbox'
 
 export class QuasarModeBuilder extends AppBuilder {
   async build () {
@@ -122,14 +123,14 @@ export class QuasarModeBuilder extends AppBuilder {
       this.quasarConf.ssr.extendPackageJson(pkg)
     }
 
-    this.writeFile('package.json', JSON.stringify(pkg, null, 2))
+    this.writeFile('package.json', stringifyJSON(pkg, { indent: 2 }))
   }
 
   async #writeRenderTemplate (clientDir) {
     const htmlFile = join(clientDir, 'index.html')
     const html = this.readFile(htmlFile)
 
-    const templateFn = getProdSsrTemplateFn(html, this.quasarConf)
+    const templateFn = await getProdSsrTemplateFn(html, this.quasarConf)
 
     this.writeFile(
       'render-template.js',
@@ -139,7 +140,7 @@ export class QuasarModeBuilder extends AppBuilder {
     if (this.quasarConf.ssr.pwa === true) {
       this.writeFile(
         `client/${ this.quasarConf.ssr.pwaOfflineHtmlFilename }`,
-        transformProdSsrPwaOfflineHtml(html, this.quasarConf)
+        await transformProdSsrPwaOfflineHtml(html, this.quasarConf)
       )
     }
 

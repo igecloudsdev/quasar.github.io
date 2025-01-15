@@ -1,4 +1,3 @@
-
 import { static as serveStatic } from 'express'
 
 import { createHeadTags } from './utils.js'
@@ -11,9 +10,7 @@ export function quasarVitePluginPwaResources (quasarConf) {
   const serviceWorkerDir = quasarConf.ctx.appPaths.resolve.entry('service-worker')
 
   function updateCache () {
-    if (quasarConf.htmlVariables.pwaManifest === pwaManifest) {
-      return
-    }
+    if (quasarConf.htmlVariables.pwaManifest === pwaManifest) return
 
     pwaManifest = quasarConf.htmlVariables.pwaManifest
     headTags = createHeadTags(quasarConf)
@@ -25,7 +22,7 @@ export function quasarVitePluginPwaResources (quasarConf) {
     enforce: 'pre',
 
     transformIndexHtml: {
-      transform: html => {
+      handler: html => {
         updateCache()
         return html.replace(
           /(<\/head>)/i,
