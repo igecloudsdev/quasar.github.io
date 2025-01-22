@@ -76,24 +76,15 @@ module.exports.createWebpackChain = async function createWebpackChain (quasarCon
   chain.resolve.extensions
     .merge(
       hasTypescript === true
-        ? [ '.mjs', '.ts', '.js', '.vue', '.json', '.wasm' ]
-        : [ '.mjs', '.js', '.vue', '.json', '.wasm' ]
+        ? [ '.mjs', '.ts', '.js', '.cjs', '.vue', '.json', '.wasm' ]
+        : [ '.mjs', '.js', '.cjs', '.vue', '.json', '.wasm' ]
     )
 
   chain.resolve.modules
     .merge(resolveModules)
 
   chain.resolve.alias
-    .merge({
-      src: appPaths.srcDir,
-      app: appPaths.appDir,
-      components: appPaths.resolve.src('components'),
-      layouts: appPaths.resolve.src('layouts'),
-      pages: appPaths.resolve.src('pages'),
-      assets: appPaths.resolve.src('assets'),
-      boot: appPaths.resolve.src('boot'),
-      stores: appPaths.resolve.src('stores')
-    })
+    .merge(quasarConf.build.alias)
 
   const extrasPath = cacheProxy.getModule('extrasPath')
   if (extrasPath) {
@@ -121,7 +112,7 @@ module.exports.createWebpackChain = async function createWebpackChain (quasarCon
     .merge(resolveModules)
 
   chain.module.noParse(
-    /^(vue|vue-router|pinia|vuex|vuex-router-sync|@quasar[\\/]extras|quasar[\\/]dist)$/
+    /^(vue|vue-router|pinia|@quasar[\\/]extras|quasar[\\/]dist)$/
   )
 
   const vueRule = chain.module.rule('vue')
@@ -224,7 +215,7 @@ module.exports.createWebpackChain = async function createWebpackChain (quasarCon
       name: `media/[name]${ assetHash }.[ext]`
     })
 
-  injectStyleRules(chain, {
+  await injectStyleRules(chain, {
     appPaths,
     cssVariables: cacheProxy.getModule('cssVariables'),
     isServerBuild: isSsrServer,
@@ -469,9 +460,12 @@ module.exports.createNodeEsbuildConfig = async function createNodeEsbuildConfig 
     ...cliPkgDependencies,
     ...Object.keys(appPkg.dependencies || {}),
     ...Object.keys(appPkg.devDependencies || {})
-  ])
+  ].filter(
+    // the possible imports of '#q-app/wrappers' / '@quasar/app-webpack/wrappers'
+    dep => dep !== cliPkg.name
+  ))
 
-  const cfg = {
+  const esbuildConfig = {
     platform: 'node',
     target: quasarConf.build.esbuildTarget.node,
     format,
@@ -479,17 +473,19 @@ module.exports.createNodeEsbuildConfig = async function createNodeEsbuildConfig 
     sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false,
     minify: quasarConf.build.minify !== false,
     alias: {
-      ...quasarConf.build.alias,
-      'quasar/wrappers': format === 'esm' ? 'quasar/wrappers/index.mjs' : 'quasar/wrappers/index.js'
+      ...quasarConf.build.alias
     },
-    resolveExtensions: [ format === 'esm' ? '.mjs' : '.cjs', '.js', '.mts', '.ts', '.json' ],
+    resolveExtensions: format === 'esm'
+      ? [ '.mjs', '.js', '.cjs', '.ts', '.json' ]
+      : [ '.cjs', '.js', '.mjs', '.ts', '.json' ],
     // we use a fresh list since this can be tampered with by the user:
     external: [ ...externalsList ],
     define: getBuildSystemDefine({
       buildEnv: quasarConf.build.env,
       buildRawDefine: quasarConf.build.rawDefine,
       fileEnv: quasarConf.metaConf.fileEnv
-    })
+    }),
+    plugins: []
   }
 
   const { hasEslint, ESLint } = cacheProxy.getModule('eslint')
@@ -498,29 +494,32 @@ module.exports.createNodeEsbuildConfig = async function createNodeEsbuildConfig 
     if (warnings === true || errors === true) {
       // import only if actually needed (as it imports app's eslint pkg)
       const { quasarEsbuildESLintPlugin } = require('./plugins/esbuild.eslint.js')
-      cfg.plugins = [
+      esbuildConfig.plugins.push(
         await quasarEsbuildESLintPlugin(quasarConf, compileId)
-      ]
+      )
     }
   }
 
-  return cfg
+  return esbuildConfig
 }
 
 module.exports.createBrowserEsbuildConfig = async function createBrowserEsbuildConfig (quasarConf, { compileId }) {
-  const cfg = {
+  const esbuildConfig = {
     platform: 'browser',
     target: quasarConf.build.esbuildTarget.browser,
     format: 'iife',
     bundle: true,
     sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false,
     minify: quasarConf.build.minify !== false,
-    alias: quasarConf.build.alias,
+    alias: {
+      ...quasarConf.build.alias
+    },
     define: getBuildSystemDefine({
       buildEnv: quasarConf.build.env,
       buildRawDefine: quasarConf.build.rawDefine,
       fileEnv: quasarConf.metaConf.fileEnv
-    })
+    }),
+    plugins: []
   }
 
   const { hasEslint, ESLint } = await quasarConf.ctx.cacheProxy.getModule('eslint')
@@ -529,13 +528,13 @@ module.exports.createBrowserEsbuildConfig = async function createBrowserEsbuildC
     if (warnings === true || errors === true) {
       // import only if actually needed (as it imports app's eslint pkg)
       const { quasarEsbuildESLintPlugin } = require('./plugins/esbuild.eslint.js')
-      cfg.plugins = [
+      esbuildConfig.plugins.push(
         await quasarEsbuildESLintPlugin(quasarConf, compileId)
-      ]
+      )
     }
   }
 
-  return cfg
+  return esbuildConfig
 }
 
 module.exports.extendEsbuildConfig = function extendEsbuildConfig (esbuildConf, quasarConfTarget, ctx, methodName) {
