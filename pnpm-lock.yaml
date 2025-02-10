@@ -103,7 +103,7 @@ importers:
         version: 10.1.0
       rollup-plugin-visualizer:
         specifier: ^5.13.1
-        version: 5.13.1(rollup@4.28.0)
+        version: 5.13.1(rollup@2.79.2)
       sass-embedded:
         specifier: ^1.83.0
         version: 1.83.0
@@ -5637,7 +5637,6 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
-    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -15476,14 +15475,14 @@ snapshots:
     optionalDependencies:
       rollup: 4.28.0
 
-  rollup-plugin-visualizer@5.13.1(rollup@4.28.0):
+  rollup-plugin-visualizer@5.13.1(rollup@2.79.2):
     dependencies:
       open: 8.4.2
       picomatch: 4.0.2
       source-map: 0.7.4
       yargs: 17.7.2
     optionalDependencies:
-      rollup: 4.28.0
+      rollup: 2.79.2
 
   rollup@2.79.2:
     optionalDependencies:
