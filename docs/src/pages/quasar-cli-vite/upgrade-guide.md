@@ -590,13 +590,14 @@ As you can see, you can now specify multiple preload scripts should you need the
 :::
 
 ```diff
-function createWindow () {
+- function createWindow () {
++ async function createWindow () {
    // ...
 -  mainWindow.loadURL(process.env.APP_URL)
 +  if (process.env.DEV) {
-+    mainWindow.loadURL(process.env.APP_URL)
++    await mainWindow.loadURL(process.env.APP_URL)
 +  } else {
-+    mainWindow.loadFile('index.html')
++    await mainWindow.loadFile('index.html')
 +  }
 ```
 
@@ -615,7 +616,7 @@ const currentDir = fileURLToPath(new URL('.', import.meta.url))
 
 let mainWindow
 
-function createWindow () {
+async function createWindow () {
   /**
    * Initial window options
    */
@@ -635,9 +636,9 @@ function createWindow () {
   })
 
   if (process.env.DEV) {
-    mainWindow.loadURL(process.env.APP_URL)
+    await mainWindow.loadURL(process.env.APP_URL)
   } else {
-    mainWindow.loadFile('index.html')
+    await mainWindow.loadFile('index.html')
   }
 
   if (process.env.DEBUGGING) {
