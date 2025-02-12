@@ -116,7 +116,7 @@
     "serialize-javascript": "^6.0.2",
     "tinyglobby": "^0.2.10",
     "ts-essentials": "^9.4.2",
-    "vite": "^6.0.7",
+    "vite": "^6.1.0",
     "webpack-merge": "^6.0.1"
   },
   "devDependencies": {
