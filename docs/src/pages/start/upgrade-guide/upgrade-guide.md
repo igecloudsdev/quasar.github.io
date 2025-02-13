@@ -334,20 +334,20 @@ You can generate a new Quasar v2 project as shown below and then you can port yo
 ```tabs
 <<| bash Yarn |>>
 $ yarn create quasar
-# then pick "App with Quasar CLI" and "Quasar v2"
+# then pick "App with Quasar CLI"
 # decide if you want "Quasar CLI with Vite" or "Quasar CLI with Webpack"
 <<| bash NPM |>>
 $ npm init quasar@latest
-# then pick "App with Quasar CLI" and "Quasar v2"
+# then pick "App with Quasar CLI"
 # decide if you want "Quasar CLI with Vite" or "Quasar CLI with Webpack"
 <<| bash PNPM |>>
 $ pnpm create quasar@latest
-# then pick "App with Quasar CLI" and "Quasar v2"
+# then pick "App with Quasar CLI"
 # decide if you want "Quasar CLI with Vite" or "Quasar CLI with Webpack"
 <<| bash Bun |>>
 # experimental support
 $ bun create quasar@latest
-# then pick "App with Quasar CLI" and "Quasar v2"
+# then pick "App with Quasar CLI"
 # decide if you want "Quasar CLI with Vite" or "Quasar CLI with Webpack"
 ```
 
