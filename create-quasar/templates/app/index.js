@@ -1,10 +1,8 @@
-
-module.exports = async function ({ scope, utils }) {
+export async function script ({ scope, utils }) {
   await utils.prompts(scope, [
-    utils.commonPrompts.quasarVersion,
     utils.commonPrompts.scriptType
   ])
 
-  const script = require(`./quasar-${scope.quasarVersion}`)
+  const { script } = await import(`./quasar-v2/index.js`)
   await script({ scope, utils })
 }

@@ -323,7 +323,7 @@ export default [
           },
           {
             name: 'File picker',
-            path: 'file-picker'
+            path: 'file'
           },
           {
             name: 'Form',
@@ -661,6 +661,41 @@ export default [
       {
         name: 'useMeta',
         path: 'use-meta'
+      },
+      {
+        name: 'useHydration',
+        badge: 'new',
+        path: 'use-hydration'
+      },
+      {
+        name: 'useId',
+        badge: 'new',
+        path: 'use-id'
+      },
+      {
+        name: 'useInterval',
+        badge: 'new',
+        path: 'use-interval'
+      },
+      {
+        name: 'useRenderCache',
+        badge: 'new',
+        path: 'use-render-cache'
+      },
+      {
+        name: 'useTick',
+        badge: 'new',
+        path: 'use-tick'
+      },
+      {
+        name: 'useTimeout',
+        badge: 'new',
+        path: 'use-timeout'
+      },
+      {
+        name: 'useSplitAttrs',
+        badge: 'new',
+        path: 'use-split-attrs'
       }
     ]
   },
@@ -684,6 +719,11 @@ export default [
     icon: 'build',
     path: 'quasar-cli-vite',
     children: [
+      {
+        name: 'Upgrade guide',
+        badge: 'NEW!',
+        path: 'upgrade-guide'
+      },
       {
         name: 'The quasar.config file',
         path: 'quasar-config-file'
@@ -749,10 +789,6 @@ export default [
         path: 'state-management-with-pinia'
       },
       {
-        name: 'State Management with Vuex',
-        path: 'state-management-with-vuex'
-      },
-      {
         name: 'Linter',
         path: 'linter'
       },
@@ -793,10 +829,6 @@ export default [
           {
             name: 'Writing Universal Code',
             path: 'writing-universal-code'
-          },
-          {
-            name: 'Upgrade guide',
-            path: 'ssr-upgrade-guide'
           },
           {
             name: 'Preparation',
@@ -1077,8 +1109,8 @@ export default [
             path: 'types-of-bex'
           },
           {
-            name: 'BEX Communication / Events',
-            path: 'bex-communication'
+            name: 'BEX Bridge Communication',
+            path: 'bex-bridge'
           },
           {
             name: 'Background Script',
@@ -1087,10 +1119,6 @@ export default [
           {
             name: 'Content Scripts',
             path: 'content-scripts'
-          },
-          {
-            name: 'DOM Script',
-            path: 'dom-script'
           }
         ]
       },
@@ -1109,6 +1137,11 @@ export default [
     icon: 'build',
     path: 'quasar-cli-webpack',
     children: [
+      {
+        name: 'Upgrade guide',
+        badge: 'NEW!',
+        path: 'upgrade-guide'
+      },
       {
         name: 'The quasar.config file',
         path: 'quasar-config-file'
@@ -1174,10 +1207,6 @@ export default [
         path: 'state-management-with-pinia'
       },
       {
-        name: 'State Management with Vuex',
-        path: 'state-management-with-vuex'
-      },
-      {
         name: 'Linter',
         path: 'linter'
       },
@@ -1220,10 +1249,6 @@ export default [
             path: 'writing-universal-code'
           },
           {
-            name: 'Upgrade guide',
-            path: 'ssr-upgrade-guide'
-          },
-          {
             name: 'Preparation',
             path: 'preparation'
           },
@@ -1240,8 +1265,8 @@ export default [
             path: 'ssr-middleware'
           },
           {
-            name: 'SSR Production Export',
-            path: 'ssr-production-export'
+            name: 'SSR Webserver',
+            path: 'ssr-webserver'
           },
           {
             name: 'Vue SSR Directives',
@@ -1268,7 +1293,7 @@ export default [
             path: 'ssr-with-pwa'
           },
           {
-            name: 'SSR Frequently Asked Questions',
+            name: 'SSR FAQ',
             path: 'ssr-frequently-asked-questions'
           },
           {
@@ -1502,20 +1527,16 @@ export default [
             path: 'types-of-bex'
           },
           {
-            name: 'BEX Communication / Events',
-            path: 'bex-communication'
+            name: 'BEX Bridge Communication',
+            path: 'bex-bridge'
           },
           {
-            name: 'Background Hooks',
-            path: 'background-hooks'
+            name: 'Background Script',
+            path: 'background-script'
           },
           {
-            name: 'Content Hooks',
-            path: 'content-hooks'
-          },
-          {
-            name: 'DOM Hooks',
-            path: 'dom-hooks'
+            name: 'Content Scripts',
+            path: 'content-scripts'
           }
         ]
       },
@@ -1664,17 +1685,14 @@ export default [
       },
       {
         name: 'Type Checking Utils',
-        badge: 'new',
         path: 'type-checking-utils'
       },
       {
         name: 'EventBus Util',
-        badge: 'new',
         path: 'event-bus-util'
       },
       {
         name: 'Other Utils',
-        badge: 'update',
         path: 'other-utils'
       }
     ]
